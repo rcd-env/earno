@@ -15,14 +15,12 @@ interface GameStatsProps {
 export function GameStats({
   matchesFound,
   totalPairs,
-  betAmount,
   potentialReward,
   flips,
   maxFlips,
   correctPairs,
   wrongPairs,
   netGain,
-  gridSize,
   isDarkMode,
 }: GameStatsProps) {
   const progress = totalPairs > 0 ? (matchesFound / totalPairs) * 100 : 0;
@@ -31,12 +29,12 @@ export function GameStats({
   return (
     <div className="space-y-3">
       {/* Grid Size */}
-      <div className="flex justify-between">
+      {/* <div className="flex justify-between">
         <span className="opacity-70">Grid Size:</span>
         <span className="font-bold">
           {gridSize}×{gridSize}
         </span>
-      </div>
+      </div> */}
 
       {/* Flips Left */}
       <div className="flex justify-between">
@@ -53,7 +51,7 @@ export function GameStats({
       </div>
 
       {/* Matches Found */}
-      <div className="flex justify-between">
+      {/* <div className="flex justify-between">
         <span className="opacity-70">Matches Found:</span>
         <span
           className="font-bold"
@@ -61,7 +59,7 @@ export function GameStats({
         >
           {matchesFound}/{totalPairs}
         </span>
-      </div>
+      </div> */}
 
       {/* Correct Pairs */}
       <div className="flex justify-between">
@@ -75,18 +73,18 @@ export function GameStats({
       </div>
 
       {/* Wrong Pairs */}
-      {wrongPairs > 0 && (
-        <div className="flex justify-between">
-          <span className="opacity-70">Wrong Pairs:</span>
-          <span className="font-bold text-red-500">{wrongPairs}</span>
-        </div>
-      )}
+      {/* {wrongPairs > 0 && ( */}
+      <div className="flex justify-between">
+        <span className="opacity-70">Wrong Pairs:</span>
+        <span className="font-bold text-red-500">{wrongPairs}</span>
+      </div>
+      {/* )} */}
 
       {/* Bet Amount */}
-      <div className="flex justify-between">
+      {/* <div className="flex justify-between">
         <span className="opacity-70">Bet Amount:</span>
         <span className="font-bold">{betAmount} CELO</span>
-      </div>
+      </div> */}
 
       {/* Potential Win */}
       <div className="flex justify-between">
