@@ -272,6 +272,7 @@ export function useMemoryGame() {
 
   return {
     // State
+    address,
     gridSize,
     betAmount,
     gameStatus,

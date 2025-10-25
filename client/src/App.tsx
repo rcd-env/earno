@@ -26,6 +26,7 @@ function App() {
   }, [isDarkMode]);
 
   const {
+    address,
     gridSize,
     betAmount,
     gameStatus,
@@ -194,6 +195,7 @@ function App() {
             <button
               onClick={startGame}
               disabled={
+                !address ||
                 isLoading ||
                 !betAmount ||
                 parseFloat(betAmount) <= 0 ||
@@ -202,6 +204,7 @@ function App() {
               className={`w-full py-4 rounded-lg border ${borderColor} text-xl font-medium shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] transition-all cursor-pointer disabled:cursor-not-allowed disabled:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] disabled:hover:translate-x-0 disabled:hover:translate-y-0 hover:shadow-none hover:translate-x-1 hover:translate-y-1`}
               style={{
                 backgroundColor:
+                  !address ||
                   isLoading ||
                   !betAmount ||
                   parseFloat(betAmount) <= 0 ||
@@ -215,7 +218,11 @@ function App() {
                 color: "#000000",
               }}
             >
-              {isLoading ? "Starting..." : "Start Game"}
+              {!address
+                ? "Connect Wallet"
+                : isLoading
+                ? "Starting..."
+                : "Start Game"}
             </button>
 
             {/* Game Stats Box */}

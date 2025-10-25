@@ -147,8 +147,22 @@ export function GameResult({
             <div className="text-sm opacity-70">Potential Reward</div>
             <div className="text-xl font-bold">{reward} CELO</div>
           </div> */}
-        </div>
 
+          {/* Quote for Loss */}
+          <div
+            className={`rounded-lg p-4 italic ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
+            style={{
+              backgroundColor: cardBg,
+              color: textColor,
+            }}
+          >
+            {netGain > 0 ? (
+              <div>"Victory belongs to the most persevering."</div>
+            ) : (
+              <div>“You made it look easy — losing, I mean.”</div>
+            )}
+          </div>
+        </div>
         {/* Actions */}
         <div className="space-y-3">
           {/* Withdraw Button - Only show if player won */}
