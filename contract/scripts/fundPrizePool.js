@@ -7,12 +7,15 @@ async function main() {
   const fundAmount = process.env.FUND_AMOUNT || "10"; // Default 10 CELO
 
   console.log(`Funding prize pool with ${fundAmount} CELO...`);
-  
+
   const [deployer] = await hre.ethers.getSigners();
   console.log(`Funding from account: ${deployer.address}`);
 
   // Get the contract
-  const MemoryGame = await hre.ethers.getContractAt("MemoryGame", contractAddress);
+  const MemoryGame = await hre.ethers.getContractAt(
+    "MemoryGame",
+    contractAddress
+  );
 
   // Fund the prize pool
   const tx = await MemoryGame.fundPrizePool({
@@ -26,7 +29,9 @@ async function main() {
 
   // Check contract balance
   const balance = await MemoryGame.getContractBalance();
-  console.log(`📊 Current contract balance: ${hre.ethers.formatEther(balance)} CELO`);
+  console.log(
+    `📊 Current contract balance: ${hre.ethers.formatEther(balance)} CELO`
+  );
 }
 
 main()

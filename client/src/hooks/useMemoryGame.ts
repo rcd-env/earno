@@ -26,10 +26,8 @@ export function useMemoryGame() {
   const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   const { writeContract, data: hash, isPending } = useWriteContract();
-  const { 
-    isLoading: isConfirming,
-    isSuccess: isConfirmed
-  } = useWaitForTransactionReceipt({ hash });
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash });
 
   // Calculate max flips based on grid size - strict limits
   useEffect(() => {
