@@ -125,7 +125,20 @@ export function useMemoryGame() {
     // Update potential reward to be the actual earned amount (what they can withdraw)
     // This is the total they get back if they won
     setPotentialReward(earnedReward.toFixed(4));
-  }, [correctPairs, wrongPairs, betAmount, gridSize]);
+    
+    // Debug logging
+    console.log("Reward calculation:", {
+      correctPairs,
+      wrongPairs,
+      totalPairsCount,
+      correctRatio,
+      maxReward,
+      earnedReward,
+      netGain: net,
+      potentialReward: earnedReward.toFixed(4),
+      gameStatus
+    });
+  }, [correctPairs, wrongPairs, betAmount, gridSize, gameStatus]);
 
   // Start a new game
   const startGame = useCallback(async () => {
@@ -249,7 +262,23 @@ export function useMemoryGame() {
   // Withdraw winnings
   const withdrawWinnings = useCallback(
     async (amount: string) => {
-      if (!address) return;
+      if (!address || !betAmount) return;
+
+      const earnedAmount = parseFloat(amount);
+      const depositAmount = parseFloat(betAmount);
+      
+      console.log("Withdrawal details:", {
+        earnedAmount,
+        depositAmount,
+        amountToWithdraw: amount
+      });
+      
+      // The earned amount should be withdrawn
+      // The difference (deposit - earned) stays in contract as Earno's profit
+      if (earnedAmount > depositAmount) {
+        console.error("Cannot withdraw more than maximum reward");
+        return;
+      }
 
       try {
         setIsWithdrawing(true);
@@ -264,7 +293,7 @@ export function useMemoryGame() {
         setIsWithdrawing(false);
       }
     },
-    [address, writeContract]
+    [address, betAmount, writeContract]
   );
 
   // Handle withdrawal confirmation - reset game to idle after successful withdrawal
