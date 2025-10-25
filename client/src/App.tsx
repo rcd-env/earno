@@ -269,7 +269,7 @@ function App() {
                   <div
                     className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-t-transparent mb-2"
                     style={{
-                      borderColor: isDarkMode ? "#B490FF" : "#000000",
+                      borderColor: isDarkMode ? "#0fa594" : "#000000",
                       borderTopColor: "transparent",
                     }}
                   ></div>
@@ -317,7 +317,7 @@ function App() {
                 <div
                   className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-t-transparent mb-4"
                   style={{
-                    borderColor: isDarkMode ? "#B490FF" : "#000000",
+                    borderColor: isDarkMode ? "#0fa594" : "#000000",
                     borderTopColor: "transparent",
                   }}
                 ></div>
@@ -334,6 +334,8 @@ function App() {
                 isDarkMode={isDarkMode}
                 onFlip={incrementFlips}
                 checkFlipLimit={checkFlipLimit}
+                flips={flips}
+                maxFlips={maxFlips}
               />
             )}
 
@@ -342,7 +344,7 @@ function App() {
                 <div
                   className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-t-transparent mb-4"
                   style={{
-                    borderColor: isDarkMode ? "#B490FF" : "#000000",
+                    borderColor: isDarkMode ? "#0fa594" : "#000000",
                     borderTopColor: "transparent",
                   }}
                 ></div>

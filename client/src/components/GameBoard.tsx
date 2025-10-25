@@ -17,6 +17,8 @@ interface GameBoardProps {
   isDarkMode: boolean;
   onFlip: () => void;
   checkFlipLimit: () => boolean;
+  flips: number;
+  maxFlips: number;
 }
 
 // Unique colors for pairs (32 pairs maximum for 8x8 grid)
@@ -63,6 +65,8 @@ export function GameBoard({
   isDarkMode,
   onFlip,
   checkFlipLimit,
+  flips,
+  maxFlips,
 }: GameBoardProps) {
   const [cards, setCards] = useState<CardType[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
@@ -106,6 +110,15 @@ export function GameBoard({
     }
   }, [cards, onGameComplete]);
 
+  // Auto-end game when flip limit is reached
+  useEffect(() => {
+    if (flips >= maxFlips && !isChecking) {
+      setTimeout(() => {
+        onGameComplete();
+      }, 100);
+    }
+  }, [flips, maxFlips, isChecking, onGameComplete]);
+
   const handleCardClick = (cardId: number) => {
     if (isChecking || disabled) return;
     if (flippedCards.includes(cardId)) return;
@@ -113,6 +126,13 @@ export function GameBoard({
 
     const card = cards.find((c) => c.id === cardId);
     if (card?.isMatched) return;
+
+    // Check flip limit before allowing first card of a new pair
+    if (flippedCards.length === 0) {
+      if (checkFlipLimit()) {
+        return; // Don't allow any more flips if limit reached
+      }
+    }
 
     const newFlippedCards = [...flippedCards, cardId];
     setFlippedCards(newFlippedCards);
@@ -158,11 +178,6 @@ export function GameBoard({
         }
         setFlippedCards([]);
         setIsChecking(false);
-
-        // Check if flip limit reached
-        if (checkFlipLimit()) {
-          onGameComplete();
-        }
       }, 1000);
     }
   };

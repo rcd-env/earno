@@ -246,7 +246,7 @@ export function useMemoryGame() {
 
   // Check if game is over due to flip limit
   const checkFlipLimit = useCallback(() => {
-    if (flips === maxFlips && gameStatus === "playing") {
+    if (flips >= maxFlips && gameStatus === "playing") {
       setGameStatus("completed");
       return true;
     }
