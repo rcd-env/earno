@@ -53,16 +53,16 @@ export function useMemoryGame() {
     // Balanced multipliers for fair gameplay
     switch (size) {
       case 2:
-        multiplier = 2; // 2x reward for perfect play
+        multiplier = 1.2; // 1.2x reward for perfect play (bet 10, win 12)
         break;
       case 4:
-        multiplier = 3; // 3x reward for perfect play
+        multiplier = 1.5; // 1.5x reward for perfect play
         break;
       case 6:
-        multiplier = 4; // 4x reward for perfect play
+        multiplier = 2; // 2x reward for perfect play
         break;
       case 8:
-        multiplier = 5; // 5x reward for perfect play
+        multiplier = 2.5; // 2.5x reward for perfect play
         break;
     }
 
@@ -87,16 +87,16 @@ export function useMemoryGame() {
     let multiplier = 1;
     switch (gridSize) {
       case 2:
-        multiplier = 2;
+        multiplier = 1.2;
         break;
       case 4:
-        multiplier = 3;
+        multiplier = 1.5;
         break;
       case 6:
-        multiplier = 4;
+        multiplier = 2;
         break;
       case 8:
-        multiplier = 5;
+        multiplier = 2.5;
         break;
     }
 
