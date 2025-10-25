@@ -49,7 +49,7 @@ export function Card({
         <div
           className="absolute w-full h-full backface-hidden rounded-lg flex items-center justify-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
           style={{
-            backgroundColor: isDarkMode ? "#502A5E" : "#FFF8F0",
+            backgroundColor: isDarkMode ? "#1d505c" : "#F4F9E9",
           }}
         >
           <div

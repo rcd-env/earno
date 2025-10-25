@@ -38,19 +38,19 @@ function App() {
     endGame();
   };
 
-  const bgColor = isDarkMode ? "bg-[#3C1F47]" : "bg-[#FCF6F1]";
+  const bgColor = isDarkMode ? "bg-[#3C1F47]" : "bg-[#FFFFFF]";
   const textColor = isDarkMode ? "text-white" : "text-gray-900";
   const borderColor = "border-black border-2";
-  const cardBg = isDarkMode ? "bg-[#502A5E]" : "bg-[#FFF8F0]";
+  const cardBg = isDarkMode ? "bg-[#1d505c]" : "bg-[#F4F9E9]";
 
   return (
     <div
       className={`min-h-screen ${textColor}`}
       style={{
-        backgroundColor: isDarkMode ? "#3C1F47" : "#FCF6F1",
+        backgroundColor: isDarkMode ? "#153243" : "#F4F9E9",
         backgroundImage: isDarkMode
-          ? `linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-             linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px)`
+          ? `linear-gradient(rgba(0, 0, 0, 1) 1px, transparent 1px),
+             linear-gradient(90deg, rgba(0, 0, 0, 1) 1px, transparent 1px)`
           : `linear-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px),
              linear-gradient(90deg, rgba(0, 0, 0, 0.15) 1px, transparent 1px)`,
         backgroundSize: "40px 40px",
@@ -68,15 +68,15 @@ function App() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className={`p-2 rounded-lg border ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all cursor-pointer`}
+              className={`p-3 rounded-lg border ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all cursor-pointer`}
               style={{
-                backgroundColor: isDarkMode ? "#B490FF" : "#FCFF51",
+                backgroundColor: isDarkMode ? "#0fa594" : "#FCFF51",
               }}
             >
               {isDarkMode ? (
-                <Moon className="w-5 h-5 text-black" />
+                <Moon className="w-6 h-6 text-black" />
               ) : (
-                <Sun className="w-5 h-5 text-black" />
+                <Sun className="w-6 h-6 text-black" />
               )}
             </button>
             <WalletConnect isDarkMode={isDarkMode} />
@@ -145,15 +145,20 @@ function App() {
                     key={amount}
                     onClick={() => updateBetAmount(amount)}
                     disabled={gameStatus !== "idle"}
-                    className={`px-4 py-2 rounded-lg border ${borderColor} ${cardBg} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`}
+                    className={`px-4 py-2 rounded-lg border ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`}
+                    style={{
+                      backgroundColor: isDarkMode ? "#1d505c" : "#F4F9E9",
+                    }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = isDarkMode
-                        ? "#B490FF"
+                        ? "#0fa594"
                         : "#FCFF51";
                       e.currentTarget.style.color = "black";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "";
+                      e.currentTarget.style.backgroundColor = isDarkMode
+                        ? "#1d505c"
+                        : "#F4F9E9";
                       e.currentTarget.style.color = "";
                     }}
                   >
@@ -180,10 +185,10 @@ function App() {
                   parseFloat(betAmount) <= 0 ||
                   gameStatus !== "idle"
                     ? isDarkMode
-                      ? "#7957A2"
+                      ? "#5fb5ad"
                       : "#FCFBA7"
                     : isDarkMode
-                    ? "#B490FF"
+                    ? "#0fa594"
                     : "#FCFF51",
                 color: "#000000",
               }}
@@ -218,7 +223,7 @@ function App() {
                     <span className="">Potential Reward:</span>
                     <span
                       className="font-bold"
-                      style={{ color: isDarkMode ? "#B490FF" : "#000000" }}
+                      style={{ color: isDarkMode ? "#0fa594" : "#000000" }}
                     >
                       {potentialReward} CELO
                     </span>
@@ -232,7 +237,7 @@ function App() {
                     <span className="opacity-70">Flips Used:</span>
                     <span
                       className="font-bold"
-                      style={{ color: isDarkMode ? "#B490FF" : "#000000" }}
+                      style={{ color: isDarkMode ? "#0fa594" : "#000000" }}
                     >
                       {flips}/{maxFlips}
                     </span>
@@ -241,7 +246,7 @@ function App() {
                     <span className="opacity-70">Matches Found:</span>
                     <span
                       className="font-bold"
-                      style={{ color: isDarkMode ? "#B490FF" : "#000000" }}
+                      style={{ color: isDarkMode ? "#0fa594" : "#000000" }}
                     >
                       {matchesFound}/{totalPairs}
                     </span>
@@ -254,7 +259,7 @@ function App() {
                     <span className="opacity-70">Potential Win:</span>
                     <span
                       className="font-bold"
-                      style={{ color: isDarkMode ? "#B490FF" : "#000000" }}
+                      style={{ color: isDarkMode ? "#0fa594" : "#000000" }}
                     >
                       {potentialReward} CELO
                     </span>
@@ -301,7 +306,7 @@ function App() {
 
           {/* Right Column - Game Board */}
           <div
-            className={`rounded-lg border ${borderColor} ${cardBg} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] p-6 flex items-center justify-center max-h-[800px]`}
+            className={`rounded-lg border ${borderColor} ${cardBg} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] p-6 flex items-center justify-center max-h-[800px] `}
           >
             {gameStatus === "idle" && (
               <div
@@ -315,7 +320,7 @@ function App() {
                   <div key={index} className="relative w-full aspect-square">
                     <div
                       className={`absolute w-full h-full rounded-lg border ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center justify-center ${
-                        isDarkMode ? "bg-[#502A5E]" : "bg-[#FFF8F0]"
+                        isDarkMode ? "bg-[#153243]" : "bg-[#F4F9E9]"
                       }`}
                     >
                       <div

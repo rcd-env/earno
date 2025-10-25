@@ -7,7 +7,7 @@ interface WalletConnectProps {
 }
 
 export function WalletConnect({ isDarkMode }: WalletConnectProps) {
-  const buttonColor = isDarkMode ? "#B490FF" : "#FCFF51";
+  const buttonColor = isDarkMode ? "#0fa594" : "#FCFF51";
   const textColor = "#000000";
 
   return (
@@ -46,7 +46,7 @@ export function WalletConnect({ isDarkMode }: WalletConnectProps) {
                     <button
                       onClick={openConnectModal}
                       type="button"
-                      className="px-4 py-2 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all font-medium cursor-pointer"
+                      className="px-4 py-3 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all font-medium cursor-pointer"
                       style={{
                         backgroundColor: buttonColor,
                         color: textColor,
@@ -62,7 +62,7 @@ export function WalletConnect({ isDarkMode }: WalletConnectProps) {
                     <button
                       onClick={openChainModal}
                       type="button"
-                      className="px-4 py-2 rounded-lg border-2 border-red-500 bg-red-500 text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all font-medium cursor-pointer"
+                      className="px-4 py-3 rounded-lg border-2 border-red-500 bg-red-500 text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all font-medium cursor-pointer"
                     >
                       Wrong network
                     </button>
@@ -74,7 +74,7 @@ export function WalletConnect({ isDarkMode }: WalletConnectProps) {
                     <button
                       onClick={openAccountModal}
                       type="button"
-                      className="px-4 py-2 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all font-medium cursor-pointer"
+                      className="px-4 py-3 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all font-medium cursor-pointer"
                       style={{
                         backgroundColor: buttonColor,
                         color: textColor,

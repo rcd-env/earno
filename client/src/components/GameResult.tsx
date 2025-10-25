@@ -19,7 +19,7 @@ export function GameResult({
   onPlayAgain,
   isDarkMode = false,
 }: GameResultProps) {
-  const bgColor = isDarkMode ? "#502A5E" : "#FFF8F0";
+  const bgColor = isDarkMode ? "#1d505c" : "#F4F9E9";
   const textColor = isDarkMode ? "white" : "#000000";
   const borderColor = "border-black border-2";
 
@@ -47,7 +47,7 @@ export function GameResult({
           <div
             className={`rounded-lg p-4 ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
             style={{
-              backgroundColor: isDarkMode ? "#3C1F47" : "#FCF6F1",
+              backgroundColor: isDarkMode ? "#3C1F47" : "#F4F9E9",
               color: textColor,
             }}
           >
@@ -60,7 +60,7 @@ export function GameResult({
           <div
             className={`rounded-lg p-4 ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
             style={{
-              backgroundColor: isDarkMode ? "#3C1F47" : "#FCF6F1",
+              backgroundColor: isDarkMode ? "#3C1F47" : "#F4F9E9",
               color: textColor,
             }}
           >
