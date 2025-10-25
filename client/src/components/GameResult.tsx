@@ -31,6 +31,25 @@ export function GameResult({
   const borderColor = "border-black border-2";
   const cardBg = isDarkMode ? "#153243" : "#F4F9E9";
 
+  // Quotes
+  const loseQuotes = [
+    "You should start a charity - oh wait, you did.",
+    "You made it look easy - losing, I mean.",
+    "Skill issue. Major one.",
+  ];
+
+  const winQuotes = [
+    "Hot hands - don't let them cool.",
+    "You're on fire - fan the flames.",
+    "Champion mode: ON. Play again to confirm it.",
+  ];
+
+  // Select random quote based on result
+  const quote =
+    netGain > 0
+      ? winQuotes[Math.floor(Math.random() * winQuotes.length)]
+      : loseQuotes[Math.floor(Math.random() * loseQuotes.length)];
+
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
       <div
@@ -85,6 +104,7 @@ export function GameResult({
               />
             </video>
           </div>
+
           {/* Matches Found */}
           {/* <div
             className={`rounded-lg p-4 ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
@@ -148,8 +168,18 @@ export function GameResult({
             <div className="text-xl font-bold">{reward} CELO</div>
           </div> */}
 
-          {/* Quote for Loss */}
+          {/* Quote */}
           <div
+            className={`rounded-lg p-4 ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
+            style={{
+              backgroundColor: cardBg,
+              color: textColor,
+            }}
+          >
+            <p className="text-md font-medium italic">"{quote}"</p>
+          </div>
+          {/* Quote for Loss */}
+          {/* <div
             className={`rounded-lg p-4 italic ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
             style={{
               backgroundColor: cardBg,
@@ -161,7 +191,7 @@ export function GameResult({
             ) : (
               <div>“You made it look easy — losing, I mean.”</div>
             )}
-          </div>
+          </div> */}
         </div>
         {/* Actions */}
         <div className="space-y-3">
