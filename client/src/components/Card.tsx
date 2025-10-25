@@ -23,30 +23,16 @@ export function Card({
   const [wasMatched, setWasMatched] = useState(false);
   const hoverSoundRef = useRef<HTMLAudioElement | null>(null);
   const flipSoundRef = useRef<HTMLAudioElement | null>(null);
-  const matchSoundRef = useRef<HTMLAudioElement | null>(null);
 
   // Initialize audio elements
   useEffect(() => {
-    // Create hover sound (high pitch click)
-    const hoverSound = new Audio();
-    hoverSound.src =
-      "data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgQ==";
-    hoverSound.volume = 0.2;
-    hoverSoundRef.current = hoverSound;
+    // Create hover sound
+    hoverSoundRef.current = new Audio("/audios/hover.mp3");
+    hoverSoundRef.current.volume = 1;
 
-    // Create flip sound (whoosh)
-    const flipSound = new Audio();
-    flipSound.src =
-      "data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA==";
-    flipSound.volume = 0.3;
-    flipSoundRef.current = flipSound;
-
-    // Create match sound (ding)
-    const matchSound = new Audio();
-    matchSound.src =
-      "data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgQ==";
-    matchSound.volume = 0.4;
-    matchSoundRef.current = matchSound;
+    // Create flip sound
+    flipSoundRef.current = new Audio("/audios/flip.mp3");
+    flipSoundRef.current.volume = 1;
   }, []);
 
   useEffect(() => {
@@ -64,12 +50,9 @@ export function Card({
     }
   }, [isFlipped, isMatched, wasMatched]);
 
-  // Play match sound when card is matched
+  // Track matched state
   useEffect(() => {
-    if (isMatched && !wasMatched && matchSoundRef.current) {
-      setTimeout(() => {
-        matchSoundRef.current?.play().catch(() => {});
-      }, 500); // Delay to sync with match animation
+    if (isMatched && !wasMatched) {
       setWasMatched(true);
     }
   }, [isMatched, wasMatched]);

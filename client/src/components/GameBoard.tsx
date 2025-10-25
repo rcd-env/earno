@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card } from "./Card";
 
 export interface CardType {
@@ -71,6 +71,17 @@ export function GameBoard({
   const [cards, setCards] = useState<CardType[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
   const [isChecking, setIsChecking] = useState(false);
+  const successSoundRef = useRef<HTMLAudioElement | null>(null);
+  const errorSoundRef = useRef<HTMLAudioElement | null>(null);
+
+  // Initialize audio elements
+  useEffect(() => {
+    successSoundRef.current = new Audio("/audios/success.mp3");
+    successSoundRef.current.volume = 0.3;
+
+    errorSoundRef.current = new Audio("/audios/error.mp3");
+    errorSoundRef.current.volume = 1;
+  }, []);
 
   // Initialize cards
   useEffect(() => {
@@ -156,7 +167,11 @@ export function GameBoard({
 
       setTimeout(() => {
         if (firstCard && secondCard && firstCard.value === secondCard.value) {
-          // Match found
+          // Match found - play success sound
+          if (successSoundRef.current) {
+            successSoundRef.current.currentTime = 0;
+            successSoundRef.current.play().catch(() => {});
+          }
           setCards((prev) =>
             prev.map((card) =>
               card.id === firstId || card.id === secondId
@@ -166,7 +181,11 @@ export function GameBoard({
           );
           onMatch(true);
         } else {
-          // No match
+          // No match - play error sound
+          if (errorSoundRef.current) {
+            errorSoundRef.current.currentTime = 0;
+            errorSoundRef.current.play().catch(() => {});
+          }
           setCards((prev) =>
             prev.map((card) =>
               card.id === firstId || card.id === secondId
