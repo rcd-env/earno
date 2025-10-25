@@ -8,6 +8,8 @@ interface GameResultProps {
   wrongPairs: number;
   netGain: number;
   onPlayAgain: () => void;
+  onWithdraw: (amount: string) => void;
+  isWithdrawing?: boolean;
   isDarkMode?: boolean;
 }
 
@@ -18,7 +20,10 @@ export function GameResult({
   // correctPairs,
   // wrongPairs,
   netGain,
+  reward,
   onPlayAgain,
+  onWithdraw,
+  isWithdrawing = false,
   isDarkMode = false,
 }: GameResultProps) {
   const bgColor = isDarkMode ? "#1d505c" : "#F4F9E9";
@@ -71,7 +76,6 @@ export function GameResult({
             <video
               autoPlay
               loop
-              muted
               playsInline
               className="w-full h-64 object-cover rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]"
             >
@@ -146,16 +150,36 @@ export function GameResult({
         </div>
 
         {/* Actions */}
-        <button
-          onClick={onPlayAgain}
-          className={`w-full font-bold py-3 rounded-lg transition text-lg ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 cursor-pointer`}
-          style={{
-            backgroundColor: isDarkMode ? "#0fa594" : "#FCFF51",
-            color: "#000000",
-          }}
-        >
-          Play Again
-        </button>
+        <div className="space-y-3">
+          {/* Withdraw Button - Only show if player won */}
+          {netGain > 0 && (
+            <button
+              onClick={() => onWithdraw(reward)}
+              disabled={isWithdrawing}
+              className={`w-full font-bold py-3 rounded-lg transition text-lg ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] disabled:hover:translate-x-0 disabled:hover:translate-y-0`}
+              style={{
+                backgroundColor: isDarkMode ? "#10b981" : "#FCFF51",
+                color: "#000000",
+              }}
+            >
+              {isWithdrawing ? "Withdrawing..." : "Withdraw Winnings"}
+            </button>
+          )}
+
+          {/* Play Again Button */}
+          {netGain <= 0 && (
+            <button
+              onClick={onPlayAgain}
+              className={`w-full font-bold py-3 rounded-lg transition text-lg ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 cursor-pointer`}
+              style={{
+                backgroundColor: isDarkMode ? "#0fa594" : "#FCFF51",
+                color: "#000000",
+              }}
+            >
+              Play Again
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

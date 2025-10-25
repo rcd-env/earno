@@ -47,6 +47,7 @@ function App() {
     handleConfirmation,
     incrementFlips,
     checkFlipLimit,
+    withdrawWinnings,
   } = useMemoryGame();
 
   // Handle transaction confirmations
@@ -270,19 +271,6 @@ function App() {
                   isDarkMode={isDarkMode}
                 />
               )}
-
-              {gameStatus === "claiming" && (
-                <div className="text-center">
-                  <div
-                    className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-t-transparent mb-2"
-                    style={{
-                      borderColor: isDarkMode ? "#0fa594" : "#000000",
-                      borderTopColor: "transparent",
-                    }}
-                  ></div>
-                  <p>Processing reward...</p>
-                </div>
-              )}
             </div>
           </div>
 
@@ -346,19 +334,6 @@ function App() {
                 maxFlips={maxFlips}
               />
             )}
-
-            {gameStatus === "claiming" && (
-              <div className="text-center">
-                <div
-                  className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-t-transparent mb-4"
-                  style={{
-                    borderColor: isDarkMode ? "#0fa594" : "#000000",
-                    borderTopColor: "transparent",
-                  }}
-                ></div>
-                <p className="text-xl font-bold">Claiming your reward...</p>
-              </div>
-            )}
           </div>
         </div>
       </main>
@@ -375,6 +350,8 @@ function App() {
           wrongPairs={wrongPairs}
           netGain={netGain}
           onPlayAgain={resetGame}
+          onWithdraw={withdrawWinnings}
+          isWithdrawing={isLoading}
           isDarkMode={isDarkMode}
         />
       )}

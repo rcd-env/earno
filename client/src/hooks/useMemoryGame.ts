@@ -7,12 +7,7 @@ import {
 import { parseEther } from "viem";
 import { MEMORY_GAME_ADDRESS, MEMORY_GAME_ABI } from "../lib/contract";
 
-export type GameStatus =
-  | "idle"
-  | "starting"
-  | "playing"
-  | "completed"
-  | "claiming";
+export type GameStatus = "idle" | "starting" | "playing" | "completed";
 
 export function useMemoryGame() {
   const { address } = useAccount();
@@ -28,6 +23,7 @@ export function useMemoryGame() {
   const [wrongPairs, setWrongPairs] = useState(0);
   const [netGain, setNetGain] = useState(0);
   const [portionValue, setPortionValue] = useState(0);
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
@@ -146,11 +142,11 @@ export function useMemoryGame() {
       const reward = calculateReward(gridSize, betAmount);
       setPotentialReward(reward);
 
+      // Call deposit function instead of startGame
       writeContract({
         address: MEMORY_GAME_ADDRESS,
         abi: MEMORY_GAME_ABI,
-        functionName: "startGame",
-        args: [BigInt(gridSize)],
+        functionName: "deposit",
         value: parseEther(betAmount),
       });
     } catch (error) {
@@ -179,30 +175,22 @@ export function useMemoryGame() {
     [address, gameStatus]
   );
 
-  // End the game
+  // End the game (client-side only, no blockchain transaction)
   const endGame = useCallback(async () => {
     if (!address || gameStatus !== "playing") return;
 
     try {
-      setGameStatus("claiming");
-
-      writeContract({
-        address: MEMORY_GAME_ADDRESS,
-        abi: MEMORY_GAME_ABI,
-        functionName: "endGame",
-      });
+      // Just update status to completed - no blockchain interaction
+      setGameStatus("completed");
     } catch (error) {
       console.error("Error ending game:", error);
-      setGameStatus("idle");
     }
-  }, [address, gameStatus, writeContract]);
+  }, [address, gameStatus]);
 
   // Handle transaction confirmation
   const handleConfirmation = useCallback(() => {
     if (isConfirmed && gameStatus === "starting") {
       setGameStatus("playing");
-    } else if (isConfirmed && gameStatus === "claiming") {
-      setGameStatus("completed");
     }
   }, [isConfirmed, gameStatus]);
 
@@ -253,6 +241,35 @@ export function useMemoryGame() {
     return false;
   }, [flips, maxFlips, gameStatus]);
 
+  // Withdraw winnings
+  const withdrawWinnings = useCallback(
+    async (amount: string) => {
+      if (!address) return;
+
+      try {
+        setIsWithdrawing(true);
+        writeContract({
+          address: MEMORY_GAME_ADDRESS,
+          abi: MEMORY_GAME_ABI,
+          functionName: "withdraw",
+          args: [parseEther(amount)],
+        });
+      } catch (error) {
+        console.error("Error withdrawing:", error);
+        setIsWithdrawing(false);
+      }
+    },
+    [address, writeContract]
+  );
+
+  // Handle withdrawal confirmation - reset game to idle after successful withdrawal
+  useEffect(() => {
+    if (isConfirmed && isWithdrawing) {
+      setIsWithdrawing(false);
+      resetGame();
+    }
+  }, [isConfirmed, isWithdrawing, resetGame]);
+
   return {
     // State
     gridSize,
@@ -280,5 +297,6 @@ export function useMemoryGame() {
     handleConfirmation,
     incrementFlips,
     checkFlipLimit,
+    withdrawWinnings,
   };
 }
