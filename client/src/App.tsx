@@ -49,10 +49,10 @@ function App() {
       style={{
         backgroundColor: isDarkMode ? "#153243" : "#F4F9E9",
         backgroundImage: isDarkMode
-          ? `linear-gradient(rgba(0, 0, 0, 1) 1px, transparent 1px),
-             linear-gradient(90deg, rgba(0, 0, 0, 1) 1px, transparent 1px)`
-          : `linear-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px),
-             linear-gradient(90deg, rgba(0, 0, 0, 0.15) 1px, transparent 1px)`,
+          ? `linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+             linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px)`
+          : `linear-gradient(rgba(0, 0, 0, 0.4) 1px, transparent 1px),
+             linear-gradient(90deg, rgba(0, 0, 0, 0.4) 1px, transparent 1px)`,
         backgroundSize: "40px 40px",
       }}
     >
@@ -223,7 +223,10 @@ function App() {
                     <span className="">Potential Reward:</span>
                     <span
                       className="font-bold"
-                      style={{ color: isDarkMode ? "#0fa594" : "#000000" }}
+                      style={{
+                        color: isDarkMode ? "#fff" : "#000000",
+                        fontWeight: "bolder",
+                      }}
                     >
                       {potentialReward} CELO
                     </span>
