@@ -24,6 +24,10 @@ export function useMemoryGame() {
   const [potentialReward, setPotentialReward] = useState("0");
   const [maxFlips, setMaxFlips] = useState(0);
   const [flips, setFlips] = useState(0);
+  const [correctPairs, setCorrectPairs] = useState(0);
+  const [wrongPairs, setWrongPairs] = useState(0);
+  const [netGain, setNetGain] = useState(0);
+  const [portionValue, setPortionValue] = useState(0);
 
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
@@ -31,46 +35,96 @@ export function useMemoryGame() {
       hash,
     });
 
-  // Calculate max flips based on grid size
+  // Calculate max flips based on grid size - strict limits
   useEffect(() => {
-    const totalCards = gridSize * gridSize;
-    const totalPairs = totalCards / 2;
-    // Allow 1.5x the number of pairs as max flips
-    const calculatedLimit = Math.floor(totalPairs * 1.5);
-    setMaxFlips(calculatedLimit);
+    const flipLimits: Record<number, number> = {
+      2: 2, // Very tight
+      4: 8, // Challenging
+      6: 18, // Moderate
+      8: 32, // Generous but still limited
+    };
+    setMaxFlips(flipLimits[gridSize] || 10);
   }, [gridSize]);
 
-  // Calculate potential reward based on grid size
+  // Calculate potential reward and portion values based on grid size
   const calculateReward = useCallback((size: number, bet: string) => {
     const betValue = parseFloat(bet);
-    let multiplier = 1;
+    if (!betValue || betValue <= 0) return "0";
 
+    let multiplier = 1;
+    const totalPairs = (size * size) / 2;
+
+    // Balanced multipliers for fair gameplay
     switch (size) {
       case 2:
-        multiplier = 1.2;
-        break;
-      case 3:
-        multiplier = 1.5;
+        multiplier = 2; // 2x reward for perfect play
         break;
       case 4:
-        multiplier = 2;
-        break;
-      case 5:
-        multiplier = 2.5;
+        multiplier = 3; // 3x reward for perfect play
         break;
       case 6:
-        multiplier = 3;
-        break;
-      case 7:
-        multiplier = 3.5;
+        multiplier = 4; // 4x reward for perfect play
         break;
       case 8:
-        multiplier = 4;
+        multiplier = 5; // 5x reward for perfect play
         break;
     }
 
-    return (betValue * multiplier).toFixed(4);
+    const totalReward = betValue * multiplier;
+    const portionVal = totalReward / totalPairs;
+    setPortionValue(portionVal);
+
+    return totalReward.toFixed(4);
   }, []);
+
+  // Calculate net gain/loss in real-time
+  useEffect(() => {
+    if (!betAmount || parseFloat(betAmount) <= 0) {
+      setNetGain(0);
+      return;
+    }
+
+    const bet = parseFloat(betAmount);
+    const totalPairsCount = (gridSize * gridSize) / 2;
+
+    // Get the multiplier for this grid size
+    let multiplier = 1;
+    switch (gridSize) {
+      case 2:
+        multiplier = 2;
+        break;
+      case 4:
+        multiplier = 3;
+        break;
+      case 6:
+        multiplier = 4;
+        break;
+      case 8:
+        multiplier = 5;
+        break;
+    }
+
+    // Calculate progress-based reward
+    // Player earns proportionally for correct pairs
+    const correctRatio =
+      totalPairsCount > 0 ? correctPairs / totalPairsCount : 0;
+    const maxReward = bet * multiplier;
+    const earnedReward = maxReward * correctRatio;
+
+    // Net gain = earned reward - original bet
+    // This means:
+    // - 0 correct = lose entire bet (-bet)
+    // - All correct = win (multiplier-1) * bet
+    // - Partial = proportional gain/loss
+    let net = earnedReward - bet;
+
+    // Ensure loss never exceeds the bet amount
+    if (net < -bet) {
+      net = -bet;
+    }
+
+    setNetGain(net);
+  }, [correctPairs, wrongPairs, betAmount, gridSize]);
 
   // Start a new game
   const startGame = useCallback(async () => {
@@ -85,6 +139,9 @@ export function useMemoryGame() {
       setTotalPairs(pairs);
       setMatchesFound(0);
       setFlips(0);
+      setCorrectPairs(0);
+      setWrongPairs(0);
+      setNetGain(0);
 
       const reward = calculateReward(gridSize, betAmount);
       setPotentialReward(reward);
@@ -104,12 +161,15 @@ export function useMemoryGame() {
 
   // Record a match
   const recordMatch = useCallback(
-    (correct: boolean) => {
+    (isCorrect: boolean) => {
       if (!address || gameStatus !== "playing") return;
 
       try {
-        if (correct) {
+        if (isCorrect) {
           setMatchesFound((prev) => prev + 1);
+          setCorrectPairs((prev) => prev + 1);
+        } else {
+          setWrongPairs((prev) => prev + 1);
         }
         // No blockchain transaction needed for tracking matches locally
       } catch (error) {
@@ -153,6 +213,10 @@ export function useMemoryGame() {
     setTotalPairs(0);
     setPotentialReward("0");
     setFlips(0);
+    setCorrectPairs(0);
+    setWrongPairs(0);
+    setNetGain(0);
+    setPortionValue(0);
   }, []);
 
   // Update grid size and recalculate reward
@@ -182,7 +246,7 @@ export function useMemoryGame() {
 
   // Check if game is over due to flip limit
   const checkFlipLimit = useCallback(() => {
-    if (flips >= maxFlips && gameStatus === "playing") {
+    if (flips === maxFlips && gameStatus === "playing") {
       setGameStatus("completed");
       return true;
     }
@@ -199,6 +263,10 @@ export function useMemoryGame() {
     potentialReward,
     maxFlips,
     flips,
+    correctPairs,
+    wrongPairs,
+    netGain,
+    portionValue,
     isLoading: isPending || isConfirming,
     isConfirmed,
 

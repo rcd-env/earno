@@ -1,27 +1,30 @@
-import { Crown, HeartCrack } from "lucide-react";
-
 interface GameResultProps {
   won: boolean;
   reward: string;
   betAmount: string;
   matchesFound: number;
   totalPairs: number;
+  correctPairs: number;
+  wrongPairs: number;
+  netGain: number;
   onPlayAgain: () => void;
   isDarkMode?: boolean;
 }
 
 export function GameResult({
-  won,
-  reward,
-  betAmount,
-  matchesFound,
-  totalPairs,
+  // won,
+  // matchesFound,
+  // totalPairs,
+  // correctPairs,
+  // wrongPairs,
+  netGain,
   onPlayAgain,
   isDarkMode = false,
 }: GameResultProps) {
   const bgColor = isDarkMode ? "#1d505c" : "#F4F9E9";
   const textColor = isDarkMode ? "white" : "#000000";
   const borderColor = "border-black border-2";
+  const cardBg = isDarkMode ? "#153243" : "#F4F9E9";
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
@@ -30,24 +33,59 @@ export function GameResult({
         style={{ backgroundColor: bgColor }}
       >
         {/* Result Title */}
-        <h2 className="text-4xl font-bold" style={{ color: textColor }}>
+        {/* <h2 className="text-4xl font-bold" style={{ color: textColor }}>
           {won ? (
             <span className="flex gap-3 justify-center items-center">
               You Won <Crown size={45} strokeWidth={2} />
             </span>
           ) : (
-            <span className="flex gap-3 justify-center items-center">
-              You Lost <HeartCrack size={45} strokeWidth={2} />
+            <span className="flex gap-3 justify-center items-center text-rose-400">
+              Try Again <HeartCrack size={45} strokeWidth={2} />
             </span>
           )}
-        </h2>
+        </h2> */}
 
         {/* Stats */}
         <div className="space-y-3">
+          {/* Net Gain/Loss - Prominent */}
           <div
             className={`rounded-lg p-4 ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
             style={{
-              backgroundColor: isDarkMode ? "#3C1F47" : "#F4F9E9",
+              backgroundColor:
+                netGain > 0 ? (isDarkMode ? "#065f46" : "#d1fae5") : cardBg,
+              color:
+                netGain > 0 ? (isDarkMode ? "#ffffff" : "#10b981") : textColor,
+            }}
+          >
+            <div className="text-sm opacity-70 font-medium uppercase tracking-wider">
+              {netGain > 0 ? "Profit" : "Result"}
+            </div>
+
+            <div className="text-3xl font-bold">
+              {netGain > 0 ? "+" : ""}
+              {netGain > 0 ? netGain.toFixed(4) : "0.0000"} CELO
+            </div>
+          </div>
+          {/* Video */}
+          <div className="my-3">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-64 object-cover rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]"
+            >
+              <source
+                src={netGain > 0 ? "/videos/Win.mp4" : "/videos/Lost.mp4"}
+                type="video/mp4"
+              />
+            </video>
+          </div>
+          {/* Matches Found */}
+          {/* <div
+            className={`rounded-lg p-4 ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
+            style={{
+              backgroundColor: cardBg,
               color: textColor,
             }}
           >
@@ -55,8 +93,34 @@ export function GameResult({
             <div className="text-2xl font-bold">
               {matchesFound} / {totalPairs}
             </div>
-          </div>
+          </div> */}
 
+          {/* Correct vs Wrong Pairs */}
+          {/* <div className="grid grid-cols-2 gap-3">
+            <div
+              className={`rounded-lg p-4 ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
+              style={{
+                backgroundColor: isDarkMode ? "#065f46" : "#d1fae5",
+                color: "#10b981",
+              }}
+            >
+              <div className="text-xs font-medium uppercase">Correct</div>
+              <div className="text-2xl font-bold">{correctPairs}</div>
+            </div>
+
+            <div
+              className={`rounded-lg p-4 ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
+              style={{
+                backgroundColor: isDarkMode ? "#7f1d1d" : "#fee2e2",
+                color: "#ef4444",
+              }}
+            >
+              <div className="text-xs font-medium uppercase">Wrong</div>
+              <div className="text-2xl font-bold">{wrongPairs}</div>
+            </div>
+          </div> */}
+
+          {/* Bet Amount
           <div
             className={`rounded-lg p-4 ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
             style={{
@@ -66,20 +130,19 @@ export function GameResult({
           >
             <div className="text-sm opacity-70">Bet Amount</div>
             <div className="text-xl font-bold">{betAmount} CELO</div>
-          </div>
+          </div> */}
 
-          {won && (
-            <div
-              className={`rounded-lg p-4 ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
-              style={{
-                backgroundColor: isDarkMode ? "#B490FF" : "#FCFF51",
-                color: "#000000",
-              }}
-            >
-              <div className="text-sm font-medium">Reward</div>
-              <div className="text-3xl font-bold">+{reward} CELO</div>
-            </div>
-          )}
+          {/* Potential Reward */}
+          {/* <div
+            className={`rounded-lg p-4 ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]`}
+            style={{
+              backgroundColor: isDarkMode ? "#3C1F47" : "#F4F9E9",
+              color: textColor,
+            }}
+          >
+            <div className="text-sm opacity-70">Potential Reward</div>
+            <div className="text-xl font-bold">{reward} CELO</div>
+          </div> */}
         </div>
 
         {/* Actions */}
@@ -87,7 +150,7 @@ export function GameResult({
           onClick={onPlayAgain}
           className={`w-full font-bold py-3 rounded-lg transition text-lg ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 cursor-pointer`}
           style={{
-            backgroundColor: isDarkMode ? "#B490FF" : "#FCFF51",
+            backgroundColor: isDarkMode ? "#0fa594" : "#FCFF51",
             color: "#000000",
           }}
         >

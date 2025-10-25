@@ -3,6 +3,13 @@ interface GameStatsProps {
   totalPairs: number;
   betAmount: string;
   potentialReward: string;
+  flips: number;
+  maxFlips: number;
+  correctPairs: number;
+  wrongPairs: number;
+  netGain: number;
+  gridSize: number;
+  isDarkMode: boolean;
 }
 
 export function GameStats({
@@ -10,54 +17,124 @@ export function GameStats({
   totalPairs,
   betAmount,
   potentialReward,
+  flips,
+  maxFlips,
+  correctPairs,
+  wrongPairs,
+  netGain,
+  gridSize,
+  isDarkMode,
 }: GameStatsProps) {
   const progress = totalPairs > 0 ? (matchesFound / totalPairs) * 100 : 0;
+  const flipsLeft = maxFlips - flips;
 
   return (
-    <div className="max-w-4xl mx-auto px-4">
-      <div className="bg-slate-800/50 border border-blue-500/30 rounded-xl p-6 space-y-4">
-        {/* Progress Bar */}
-        <div>
-          <div className="flex justify-between text-sm mb-2">
-            <span className="text-slate-300">Progress</span>
-            <span className="text-blue-400 font-bold">
-              {matchesFound} / {totalPairs} pairs
-            </span>
-          </div>
-          <div className="w-full bg-slate-700 rounded-full h-3 overflow-hidden">
-            <div
-              className="bg-blue-500 h-full transition-all duration-300 rounded-full"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        </div>
+    <div className="space-y-3">
+      {/* Grid Size */}
+      <div className="flex justify-between">
+        <span className="opacity-70">Grid Size:</span>
+        <span className="font-bold">
+          {gridSize}×{gridSize}
+        </span>
+      </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-4 text-center pt-2">
-          <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
-            <div className="text-slate-400 text-xs uppercase tracking-wider">
-              Bet Amount
-            </div>
-            <div className="text-white text-lg font-bold mt-1">
-              {betAmount} CELO
-            </div>
-          </div>
-          <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
-            <div className="text-slate-400 text-xs uppercase tracking-wider">
-              Matches Found
-            </div>
-            <div className="text-blue-400 text-lg font-bold mt-1">
-              {matchesFound}/{totalPairs}
-            </div>
-          </div>
-          <div className="bg-slate-900/50 rounded-lg p-3 border border-blue-500/30">
-            <div className="text-slate-400 text-xs uppercase tracking-wider">
-              Potential Win
-            </div>
-            <div className="text-blue-400 text-lg font-bold mt-1">
-              {potentialReward} CELO
-            </div>
-          </div>
+      {/* Flips Left */}
+      <div className="flex justify-between">
+        <span className="opacity-70">Flips Left:</span>
+        <span
+          className="font-bold"
+          style={{
+            color:
+              flipsLeft <= 3 ? "#ef4444" : isDarkMode ? "#0fa594" : "#000000",
+          }}
+        >
+          {flipsLeft}/{maxFlips}
+        </span>
+      </div>
+
+      {/* Matches Found */}
+      <div className="flex justify-between">
+        <span className="opacity-70">Matches Found:</span>
+        <span
+          className="font-bold"
+          style={{ color: isDarkMode ? "#0fa594" : "#000000" }}
+        >
+          {matchesFound}/{totalPairs}
+        </span>
+      </div>
+
+      {/* Correct Pairs */}
+      <div className="flex justify-between">
+        <span className="opacity-70">Correct Pairs:</span>
+        <span
+          className="font-bold"
+          style={{ color: isDarkMode ? "#0fa594" : "#000000" }}
+        >
+          {correctPairs}/{totalPairs}
+        </span>
+      </div>
+
+      {/* Wrong Pairs */}
+      {wrongPairs > 0 && (
+        <div className="flex justify-between">
+          <span className="opacity-70">Wrong Pairs:</span>
+          <span className="font-bold text-red-500">{wrongPairs}</span>
+        </div>
+      )}
+
+      {/* Bet Amount */}
+      <div className="flex justify-between">
+        <span className="opacity-70">Bet Amount:</span>
+        <span className="font-bold">{betAmount} CELO</span>
+      </div>
+
+      {/* Potential Win */}
+      <div className="flex justify-between">
+        <span className="opacity-70">Potential Win:</span>
+        <span
+          className="font-bold"
+          style={{ color: isDarkMode ? "#0fa594" : "#000000" }}
+        >
+          {potentialReward} CELO
+        </span>
+      </div>
+
+      {/* Current Result (Net Gain/Loss) */}
+      <div className="flex justify-between">
+        <span className="opacity-70">Current Result:</span>
+        <span
+          className="font-bold"
+          style={{
+            color:
+              netGain > 0
+                ? "#10b981"
+                : netGain < 0
+                ? "#ef4444"
+                : isDarkMode
+                ? "#ffffff"
+                : "#000000",
+          }}
+        >
+          {netGain >= 0 ? "+" : ""}
+          {netGain.toFixed(4)} CELO
+        </span>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="mt-4">
+        <div
+          className="w-full h-2 rounded-full overflow-hidden"
+          style={{
+            backgroundColor: isDarkMode ? "#153243" : "#E5D4C1",
+          }}
+        >
+          <div
+            className="h-full transition-all duration-300"
+            style={{
+              backgroundColor: isDarkMode ? "#0fa594" : "#FCFF51",
+              width: `${progress}%`,
+            }}
+          />
         </div>
       </div>
     </div>

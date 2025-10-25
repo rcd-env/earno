@@ -3,10 +3,20 @@ import { Moon, Sun } from "lucide-react";
 import { WalletConnect } from "./components/wallet-connect";
 import { GameBoard } from "./components/GameBoard";
 import { GameResult } from "./components/GameResult";
+import { GameStats } from "./components/GameStats";
 import { useMemoryGame } from "./hooks/useMemoryGame";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Apply theme to document for scrollbar styling
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.removeAttribute("data-theme");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  }, [isDarkMode]);
 
   const {
     gridSize,
@@ -17,6 +27,9 @@ function App() {
     potentialReward,
     maxFlips,
     flips,
+    correctPairs,
+    wrongPairs,
+    netGain,
     isLoading,
     startGame,
     recordMatch,
@@ -45,14 +58,14 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen ${textColor}`}
+      className={`min-h-screen ${textColor} ${!isDarkMode ? "light-mode" : ""}`}
       style={{
         backgroundColor: isDarkMode ? "#153243" : "#F4F9E9",
         backgroundImage: isDarkMode
-          ? `linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
-             linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px)`
-          : `linear-gradient(rgba(0, 0, 0, 0.4) 1px, transparent 1px),
-             linear-gradient(90deg, rgba(0, 0, 0, 0.4) 1px, transparent 1px)`,
+          ? `linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+             linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)`
+          : `linear-gradient(rgba(0, 0, 0, 0.09) 1px, transparent 1px),
+             linear-gradient(90deg, rgba(0, 0, 0, 0.09) 1px, transparent 1px)`,
         backgroundSize: "40px 40px",
       }}
     >
@@ -105,7 +118,7 @@ function App() {
                     updateGridSize(size);
                   }}
                   disabled={gameStatus !== "idle"}
-                  className={`w-full px-4 py-3 rounded-lg border ${borderColor} ${cardBg} ${textColor} text-xl font-medium shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all`}
+                  className={`w-full px-4 py-3 rounded-lg border ${borderColor} ${cardBg} ${textColor} text-xl font-medium shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] focus:outline-none disabled:opacity-80 disabled:cursor-not-allowed transition-all`}
                 >
                   <option value="2x2">2x2</option>
                   <option value="4x4">4x4</option>
@@ -129,14 +142,15 @@ function App() {
                   onChange={(e) => updateBetAmount(e.target.value)}
                   disabled={gameStatus !== "idle"}
                   placeholder="0.00"
-                  className={`w-full px-4 py-3 rounded-lg border ${borderColor} ${cardBg} ${textColor} text-xl text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all`}
+                  className={`w-full px-4 py-3 rounded-lg border ${borderColor} ${cardBg} ${textColor} text-xl text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] focus:outline-none 
+                    disabled:opacity-80 disabled:cursor-not-allowed transition-all`}
                 />
               </div>
             </div>
 
             {/* Quick Bets */}
             <div>
-              <p className={`text-sm mb-2 ${textColor} opacity-70`}>
+              <p className={`text-md font-semibold mb-2 ${textColor}`}>
                 Quick Bets:
               </p>
               <div className="flex flex-wrap gap-2">
@@ -145,7 +159,7 @@ function App() {
                     key={amount}
                     onClick={() => updateBetAmount(amount)}
                     disabled={gameStatus !== "idle"}
-                    className={`px-4 py-2 rounded-lg border ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`}
+                    className={`px-4 py-2 rounded-lg border ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed`}
                     style={{
                       backgroundColor: isDarkMode ? "#1d505c" : "#F4F9E9",
                     }}
@@ -235,61 +249,19 @@ function App() {
               )}
 
               {(gameStatus === "playing" || gameStatus === "starting") && (
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="opacity-70">Flips Used:</span>
-                    <span
-                      className="font-bold"
-                      style={{ color: isDarkMode ? "#0fa594" : "#000000" }}
-                    >
-                      {flips}/{maxFlips}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="opacity-70">Matches Found:</span>
-                    <span
-                      className="font-bold"
-                      style={{ color: isDarkMode ? "#0fa594" : "#000000" }}
-                    >
-                      {matchesFound}/{totalPairs}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="opacity-70">Bet Amount:</span>
-                    <span className="font-bold">{betAmount} CELO</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="opacity-70">Potential Win:</span>
-                    <span
-                      className="font-bold"
-                      style={{ color: isDarkMode ? "#0fa594" : "#000000" }}
-                    >
-                      {potentialReward} CELO
-                    </span>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="mt-4">
-                    <div
-                      className={`w-full h-2 rounded-full overflow-hidden`}
-                      style={{
-                        backgroundColor: isDarkMode ? "#3C1F47" : "#E5D4C1",
-                      }}
-                    >
-                      <div
-                        className="h-full transition-all duration-300"
-                        style={{
-                          backgroundColor: isDarkMode ? "#B490FF" : "#FCFF51",
-                          width: `${
-                            totalPairs > 0
-                              ? (matchesFound / totalPairs) * 100
-                              : 0
-                          }%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
+                <GameStats
+                  matchesFound={matchesFound}
+                  totalPairs={totalPairs}
+                  betAmount={betAmount}
+                  potentialReward={potentialReward}
+                  flips={flips}
+                  maxFlips={maxFlips}
+                  correctPairs={correctPairs}
+                  wrongPairs={wrongPairs}
+                  netGain={netGain}
+                  gridSize={gridSize}
+                  isDarkMode={isDarkMode}
+                />
               )}
 
               {gameStatus === "claiming" && (
@@ -389,6 +361,9 @@ function App() {
           betAmount={betAmount}
           matchesFound={matchesFound}
           totalPairs={totalPairs}
+          correctPairs={correctPairs}
+          wrongPairs={wrongPairs}
+          netGain={netGain}
           onPlayAgain={resetGame}
           isDarkMode={isDarkMode}
         />

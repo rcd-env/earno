@@ -83,23 +83,38 @@
   .duration-600 {
     transition-duration: 600ms;
   }
+}
 
-  /* Scrollbar Styling */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
 
-  ::-webkit-scrollbar-track {
-    background: #3c1f47;
-  }
+/* Dark mode scrollbar (default) */
+::-webkit-scrollbar-track {
+  background: #153243;
+}
 
-  ::-webkit-scrollbar-thumb {
-    background: #b490ff;
-    border-radius: 4px;
-  }
+::-webkit-scrollbar-thumb {
+  background: #0fa594;
+  border-radius: 4px;
+}
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: #9370db;
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: #1d505c;
+}
+
+/* Light mode scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #fffffd !important;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #f6f954 !important;
+  border-radius: 4px;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: #d4d800 !important;
 }
