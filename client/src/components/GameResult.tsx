@@ -82,7 +82,7 @@ export function GameResult({
             }}
           >
             <div className="text-sm opacity-70 font-medium uppercase tracking-wider">
-              {netGain > 0 ? "Profit" : "Result"}
+              {netGain > 0 ? "Profit" : "Profit"}
             </div>
 
             <div className="text-3xl font-bold">
@@ -195,8 +195,8 @@ export function GameResult({
         </div>
         {/* Actions */}
         <div className="space-y-3">
-          {/* Withdraw Button - Only show if player won */}
-          {netGain > 0 && (
+          {/* Withdraw/Claim Button - Show if player earned anything */}
+          {parseFloat(reward) > 0 && (
             <button
               onClick={() => onWithdraw(reward)}
               disabled={isWithdrawing}
@@ -206,12 +206,16 @@ export function GameResult({
                 color: "#000000",
               }}
             >
-              {isWithdrawing ? "Withdrawing..." : "Withdraw Winnings"}
+              {isWithdrawing
+                ? "Withdrawing..."
+                : netGain > 0
+                ? "Withdraw Winnings"
+                : "Claim Partial Refund"}
             </button>
           )}
 
-          {/* Play Again Button */}
-          {netGain <= 0 && (
+          {/* Play Again Button - Only show if they earned nothing */}
+          {parseFloat(reward) === 0 && (
             <button
               onClick={onPlayAgain}
               className={`w-full font-bold py-3 rounded-lg transition text-lg ${borderColor} shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 cursor-pointer`}

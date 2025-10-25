@@ -1,6 +1,6 @@
 // Contract Address - Update this after deploying to Celo Alfajores
 export const MEMORY_GAME_ADDRESS =
-  "0x0000000000000000000000000000000000000000" as `0x${string}`;
+  "0xEb656345A484d91E3814420D00F81a20fA292472" as `0x${string}`;
 
 // Contract ABI
 export const MEMORY_GAME_ABI = [

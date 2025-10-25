@@ -77,6 +77,7 @@ export function useMemoryGame() {
   useEffect(() => {
     if (!betAmount || parseFloat(betAmount) <= 0) {
       setNetGain(0);
+      setPotentialReward("0");
       return;
     }
 
@@ -120,6 +121,10 @@ export function useMemoryGame() {
     }
 
     setNetGain(net);
+
+    // Update potential reward to be the actual earned amount (what they can withdraw)
+    // This is the total they get back if they won
+    setPotentialReward(earnedReward.toFixed(4));
   }, [correctPairs, wrongPairs, betAmount, gridSize]);
 
   // Start a new game
