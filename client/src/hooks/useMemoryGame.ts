@@ -26,10 +26,10 @@ export function useMemoryGame() {
   const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   const { writeContract, data: hash, isPending } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({
-      hash,
-    });
+  const { 
+    isLoading: isConfirming,
+    isSuccess: isConfirmed
+  } = useWaitForTransactionReceipt({ hash });
 
   // Calculate max flips based on grid size - strict limits
   useEffect(() => {
@@ -77,7 +77,11 @@ export function useMemoryGame() {
   useEffect(() => {
     if (!betAmount || parseFloat(betAmount) <= 0) {
       setNetGain(0);
-      setPotentialReward("0");
+      return;
+    }
+
+    // Only calculate during/after playing
+    if (gameStatus === "idle" || gameStatus === "starting") {
       return;
     }
 
@@ -102,30 +106,17 @@ export function useMemoryGame() {
     }
 
     // Calculate progress-based reward
-    // Player earns proportionally for correct pairs
     const correctRatio =
       totalPairsCount > 0 ? correctPairs / totalPairsCount : 0;
     const maxReward = bet * multiplier;
     const earnedReward = maxReward * correctRatio;
 
     // Net gain = earned reward - original bet
-    // This means:
-    // - 0 correct = lose entire bet (-bet)
-    // - All correct = win (multiplier-1) * bet
-    // - Partial = proportional gain/loss
-    let net = earnedReward - bet;
-
-    // Ensure loss never exceeds the bet amount
-    if (net < -bet) {
-      net = -bet;
-    }
+    const net = earnedReward - bet;
 
     setNetGain(net);
-
-    // Update potential reward to be the actual earned amount (what they can withdraw)
-    // This is the total they get back if they won
     setPotentialReward(earnedReward.toFixed(4));
-  }, [correctPairs, wrongPairs, betAmount, gridSize]);
+  }, [correctPairs, wrongPairs, betAmount, gridSize, gameStatus]);
 
   // Start a new game
   const startGame = useCallback(async () => {
