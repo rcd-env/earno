@@ -477,7 +477,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Live Demo**: [Coming Soon]
+- **Live Demo**: [Earno](https://earno-celo.vercel.app)
 - **Contract on BlockScout**: [0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f](https://celo-alfajores.blockscout.com/address/0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f)
 - **Celo Faucet**: [https://faucet.celo.org/alfajores](https://faucet.celo.org/alfajores)
 - **Celo Documentation**: [https://docs.celo.org](https://docs.celo.org)
