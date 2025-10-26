@@ -256,10 +256,10 @@ npm run dev
 
 | Grid Size | Total Pairs | Max Flips | Reward Multiplier |
 | --------- | ----------- | --------- | ----------------- |
-| 2x2       | 2 pairs     | 12 flips  | 1.2x              |
-| 4x4       | 8 pairs     | 48 flips  | 1.5x              |
-| 6x6       | 18 pairs    | 108 flips | 2.0x              |
-| 8x8       | 32 pairs    | 192 flips | 2.5x              |
+| 2x2       | 2 pairs     | 2 flips   | 1.2x              |
+| 4x4       | 8 pairs     | 8 flips   | 1.5x              |
+| 6x6       | 18 pairs    | 18 flips  | 2.0x              |
+| 8x8       | 32 pairs    | 32 flips  | 2.5x              |
 
 ### Proportional Rewards System
 
