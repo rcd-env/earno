@@ -81,9 +81,9 @@ export function WalletConnect({ isDarkMode }: WalletConnectProps) {
                       }}
                     >
                       {account.displayName}
-                      {account.displayBalance
+                      {/*{account.displayBalance
                         ? ` (${account.displayBalance})`
-                        : ""}
+                        : ""}*/}
                     </button>
                   </div>
                 );
