@@ -1,7 +1,7 @@
 import { defineChain } from "viem";
 import { sepolia } from "viem/chains";
 
-// Celo Alfajores Testnet
+// Celo Alfajores Testnet with multiple RPC endpoints for better reliability
 export const celoAlfajores = defineChain({
   id: 44787,
   name: "Celo Alfajores Testnet",
@@ -11,8 +11,19 @@ export const celoAlfajores = defineChain({
     symbol: "CELO",
   },
   rpcUrls: {
-    default: { http: ["https://alfajores-forno.celo-testnet.org"] },
-    public: { http: ["https://alfajores-forno.celo-testnet.org"] },
+    default: {
+      http: [
+        "https://alfajores-forno.celo-testnet.org",
+        "https://celo-alfajores.infura.io/v3/",
+        "https://alfajores-forno.celo.org",
+      ],
+    },
+    public: {
+      http: [
+        "https://alfajores-forno.celo-testnet.org",
+        "https://alfajores-forno.celo.org",
+      ],
+    },
   },
   blockExplorers: {
     default: {
