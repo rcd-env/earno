@@ -64,6 +64,10 @@ The game is powered by a Solidity smart contract deployed on Celo Alfajores test
 
 ## 📸 Screenshots
 
+### Game Wireframe
+
+![Game Wireframe](./docs/screenshots/wireframe.png)
+
 ### Home Screen
 
 ![Home Screen](./docs/screenshots/home.png)
