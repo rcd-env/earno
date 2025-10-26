@@ -92,7 +92,7 @@ _Celebrate your win and withdraw your earnings_
 ### Losing Screen
 
 ![Victory Screen](./docs/screenshots/lose.png)
-_"Shree Krishna ko v madhav betting harne ke bad hi mile the"_
+_"Pandavo ko v krishna bet harne ke bad hi mile the"_
 
 ### Wallet Connection
 
