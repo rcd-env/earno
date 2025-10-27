@@ -219,7 +219,7 @@ function App() {
               }}
             >
               {!address
-                ? "Connect Wallet"
+                ? "Wallet Not Connected"
                 : isLoading
                 ? "Starting..."
                 : "Start Game"}

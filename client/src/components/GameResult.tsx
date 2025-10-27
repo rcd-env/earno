@@ -41,7 +41,7 @@ export function GameResult({
   const winQuotes = [
     "Hot hands - don't let them cool.",
     "You're on fire - fan the flames.",
-    "Champion mode: ON. Play again to confirm it.",
+    "Win mode: ON. Play again to confirm.",
   ];
 
   // Select random quote based on result
