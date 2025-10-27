@@ -93,9 +93,11 @@ export function GameResult({
           {/* Video */}
           <div className="my-3">
             <video
+              key={netGain > 0 ? "win" : "lose"}
               autoPlay
               loop
               playsInline
+              preload="auto"
               className="w-full h-64 object-cover rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]"
             >
               <source

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Card } from "./Card";
+import { useVideoPreloader } from "../hooks/useVideoPreloader";
 
 export interface CardType {
   id: number;
@@ -73,6 +74,9 @@ export function GameBoard({
   const [isChecking, setIsChecking] = useState(false);
   const successSoundRef = useRef<HTMLAudioElement | null>(null);
   const errorSoundRef = useRef<HTMLAudioElement | null>(null);
+
+  // Preload result videos when game starts (cards initialized)
+  useVideoPreloader(cards.length > 0);
 
   // Initialize audio elements
   useEffect(() => {
