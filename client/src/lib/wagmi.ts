@@ -1,15 +1,22 @@
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { http } from "viem";
-import { celoAlfajores } from "./config";
+import { celoMainnet, celoAlfajores } from "./config";
+
+// Use mainnet by default, can override with env variable
+const USE_MAINNET = import.meta.env.VITE_USE_MAINNET !== "false";
+const activeChain = USE_MAINNET ? celoMainnet : celoAlfajores;
+const rpcUrl = USE_MAINNET
+  ? "https://forno.celo.org"
+  : "https://alfajores-forno.celo-testnet.org";
 
 export const config = getDefaultConfig({
   appName: "Earno",
   projectId:
     import.meta.env.VITE_WALLETCONNECT_PROJECT_ID ||
     "YOUR_WALLETCONNECT_PROJECT_ID",
-  chains: [celoAlfajores],
+  chains: [activeChain],
   transports: {
-    [celoAlfajores.id]: http("https://alfajores-forno.celo-testnet.org", {
+    [activeChain.id]: http(rpcUrl, {
       batch: {
         wait: 100, // Batch requests to reduce RPC calls
       },

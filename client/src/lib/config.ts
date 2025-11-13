@@ -1,6 +1,32 @@
 import { defineChain } from "viem";
 import { sepolia } from "viem/chains";
 
+// Celo Mainnet
+export const celoMainnet = defineChain({
+  id: 42220,
+  name: "Celo Mainnet",
+  nativeCurrency: {
+    decimals: 18,
+    name: "Celo",
+    symbol: "CELO",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://forno.celo.org", "https://rpc.ankr.com/celo"],
+    },
+    public: {
+      http: ["https://forno.celo.org"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "CeloScan",
+      url: "https://celoscan.io",
+    },
+  },
+  testnet: false,
+});
+
 // Celo Alfajores Testnet with multiple RPC endpoints for better reliability
 export const celoAlfajores = defineChain({
   id: 44787,
