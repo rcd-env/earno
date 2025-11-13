@@ -2,11 +2,11 @@
 
 > **Your way to earn while you play!**
 
-Earno is a decentralized memory card game built on the Celo Alfajores testnet where players can bet CELO tokens and earn rewards based on their performance. The better you play, the more you earn!
+Earno is a decentralized memory card game built on the Celo Mainnet where players can bet CELO tokens and earn rewards based on their performance. The better you play, the more you earn!
 
 [![Built with React](https://img.shields.io/badge/React-19.1.1-61DAFB?logo=react)](https://reactjs.org/)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.20-363636?logo=solidity)](https://soliditylang.org/)
-[![Celo](https://img.shields.io/badge/Celo-Alfajores-FBCC5C)](https://celo.org/)
+[![Celo](https://img.shields.io/badge/Celo-Mainnet-FBCC5C)](https://celo.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -38,7 +38,7 @@ Earno combines the classic memory card matching game with blockchain technology,
 - **Compete** across different difficulty levels (2x2, 4x4, 6x6, 8x8 grids)
 - **Win up to 2.5x** their bet amount on perfect games
 
-The game is powered by a Solidity smart contract deployed on Celo Alfajores testnet, ensuring transparent and trustless gameplay.
+The game is powered by a Solidity smart contract deployed on Celo Mainnet, ensuring transparent and trustless gameplay with real CELO rewards.
 
 ---
 
@@ -106,12 +106,14 @@ _Multiple wallet options powered by RainbowKit_
 ### Deployed Contract Address
 
 ```
-0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f
+0x37E170C1853999bcDb71B2633C406c8b8Bb23334
 ```
 
-**Network**: Celo Alfajores Testnet  
+**Network**: Celo Mainnet (Chain ID: 42220)  
 **Compiler**: Solidity 0.8.20  
-**Block Explorer**: [View on BlackScout](https://celo-alfajores.blockscout.com/address/0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f?tab=index)
+**Block Explorer**: [View on CeloScan](https://celoscan.io/address/0x37E170C1853999bcDb71B2633C406c8b8Bb23334)
+
+**Previous Testnet Contract**: `0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f` (Alfajores)
 
 ### Contract Features
 
@@ -162,7 +164,8 @@ event PrizePoolFunded(uint256 amount)
 
 - **Solidity 0.8.20** - Smart contract language
 - **Hardhat 2.22.0** - Development environment
-- **Celo Alfajores** - Testnet deployment
+- **Celo Mainnet** - Production deployment
+- **Celo Alfajores** - Testnet for development
 
 ---
 
@@ -173,7 +176,8 @@ event PrizePoolFunded(uint256 amount)
 - **Node.js** (v18 or higher)
 - **npm** or **yarn**
 - **MetaMask** or any Web3 wallet
-- **Celo Alfajores testnet** CELO tokens ([Get from faucet](https://faucet.celo.org/alfajores))
+- **Real CELO tokens** for mainnet (buy from exchanges like Binance, Coinbase)
+- **Celo Alfajores testnet** CELO for testing ([Get from faucet](https://faucet.celo.org/alfajores))
 
 ### Installation
 
@@ -204,8 +208,9 @@ Create `.env` file in the `contract` directory:
 
 ```env
 PRIVATE_KEY=your_private_key_here
-CELO_ALFAJORES_RPC=https://alfajores-forno.celo-testnet.org
 ```
+
+**⚠️ Security Warning**: Never commit `.env` file to git. Keep your private key secure!
 
 5. **Run the development server**
 
@@ -377,32 +382,59 @@ npx hardhat run scripts/deploy.js --network localhost
 
 ## 🚀 Deployment
 
-### Deploy Smart Contract
+### Deploy Smart Contract to Mainnet
 
 1. **Set up environment variables**
 
 ```bash
 cd contract
-cp .env.example .env
-# Edit .env with your private key
+# Add your private key to .env file
+echo "PRIVATE_KEY=your_private_key_here" > .env
 ```
 
-2. **Deploy to Celo Alfajores**
+2. **Ensure you have CELO for gas**
+
+You need at least 1-2 CELO in your wallet:
+- For deployment gas fees (~0.5 CELO)
+- For funding the prize pool (optional, recommended 10-100 CELO)
+
+3. **Deploy to Celo Mainnet**
+
+```bash
+npx hardhat run scripts/deploy-mainnet.js --network celo
+```
+
+This will output your contract address. Save it!
+
+4. **Fund the prize pool (optional but recommended)**
+
+Edit `scripts/fund-mainnet.js` with your contract address and desired amount:
+
+```javascript
+const CONTRACT_ADDRESS = "0x37E170C1853999bcDb71B2633C406c8b8Bb23334";
+const FUND_AMOUNT = "10"; // Amount in CELO
+```
+
+Then run:
+
+```bash
+npx hardhat run scripts/fund-mainnet.js --network celo
+```
+
+5. **Update client configuration**
+
+Update `client/src/lib/contract.ts` with your new contract address.
+
+### Deploy to Testnet (for testing)
 
 ```bash
 npx hardhat run scripts/deploy.js --network alfajores
 ```
 
-3. **Verify contract** (optional)
+### Verify Contract (optional)
 
 ```bash
-npx hardhat verify --network alfajores DEPLOYED_CONTRACT_ADDRESS
-```
-
-4. **Fund the prize pool**
-
-```bash
-FUND_AMOUNT=10 npx hardhat run scripts/fundPrizePool.js --network alfajores
+npx hardhat verify --network celo 0x37E170C1853999bcDb71B2633C406c8b8Bb23334
 ```
 
 ### Deploy Frontend
@@ -453,6 +485,40 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
+## 🌐 Mainnet vs Testnet
+
+### Current Deployment: Celo Mainnet
+
+**Mainnet Contract**: `0x37E170C1853999bcDb71B2633C406c8b8Bb23334`
+- ✅ Real CELO tokens
+- ✅ Real rewards and prizes
+- ✅ Production-ready
+- ⚠️ Requires real funds
+
+### Testnet (for Development)
+
+**Testnet Contract**: `0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f` (Alfajores)
+- ✅ Free test tokens
+- ✅ Safe for testing
+- ✅ No real money risk
+- 🔗 [Get testnet CELO](https://faucet.celo.org/alfajores)
+
+### Switching Networks
+
+To switch between mainnet and testnet, update the `VITE_USE_MAINNET` environment variable:
+
+**For Mainnet** (default):
+```env
+VITE_USE_MAINNET=true
+```
+
+**For Testnet**:
+```env
+VITE_USE_MAINNET=false
+```
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -477,10 +543,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Live Demo**: [Earno](https://earno-celo.vercel.app)
-- **Contract on BlockScout**: [0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f](https://celo-alfajores.blockscout.com/address/0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f)
-- **Celo Faucet**: [https://faucet.celo.org/alfajores](https://faucet.celo.org/alfajores)
+- **Live Demo**: [Earno on Vercel](https://earno-celo.vercel.app)
+- **Mainnet Contract**: [View on CeloScan](https://celoscan.io/address/0x37E170C1853999bcDb71B2633C406c8b8Bb23334)
+- **Testnet Contract**: [View on BlockScout](https://celo-alfajores.blockscout.com/address/0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f)
+- **Celo Faucet** (testnet): [https://faucet.celo.org/alfajores](https://faucet.celo.org/alfajores)
 - **Celo Documentation**: [https://docs.celo.org](https://docs.celo.org)
+- **Buy CELO**: [Binance](https://www.binance.com/en/trade/CELO_USDT) | [Coinbase](https://www.coinbase.com/price/celo)
 
 ---
 
