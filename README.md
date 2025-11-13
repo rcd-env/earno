@@ -106,30 +106,44 @@ _Multiple wallet options powered by RainbowKit_
 ### Deployed Contract Address
 
 ```
-0x37E170C1853999bcDb71B2633C406c8b8Bb23334
+0x153C0cb779Cf4955329989d23304736A9889eD0d
 ```
 
 **Network**: Celo Mainnet (Chain ID: 42220)  
 **Compiler**: Solidity 0.8.20  
-**Block Explorer**: [View on CeloScan](https://celoscan.io/address/0x37E170C1853999bcDb71B2633C406c8b8Bb23334)
+**Block Explorer**: [View on CeloScan](https://celoscan.io/address/0x153C0cb779Cf4955329989d23304736A9889eD0d)
 
-**Previous Testnet Contract**: `0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f` (Alfajores)
+**Previous Contracts**:
+
+- Testnet: `0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f` (Alfajores)
+- Mainnet v1: `0x37E170C1853999bcDb71B2633C406c8b8Bb23334` (deprecated)
 
 ### Contract Features
 
 - **Deposits**: Players deposit CELO to start a game
 - **Withdrawals**: Players can withdraw their winnings (proportional to performance)
 - **Prize Pool**: Owner can fund the prize pool to ensure payouts exceed deposits
+- **Owner Withdrawals**: Contract owner can withdraw funds from the contract at any time
 - **Balance Tracking**: Tracks individual player deposits and contract balance
+- **Access Control**: Owner-only functions protected with modifiers
 
 ### Contract Functions
+
+**Player Functions:**
 
 ```solidity
 function deposit() external payable
 function withdraw(uint256 amount) external
-function fundPrizePool() external payable
 function getBalance(address player) external view returns (uint256)
 function getContractBalance() external view returns (uint256)
+```
+
+**Owner Functions:**
+
+```solidity
+function fundPrizePool() external payable
+function ownerWithdraw(uint256 amount) external onlyOwner
+function ownerWithdrawAll() external onlyOwner
 ```
 
 ### Events
@@ -138,6 +152,7 @@ function getContractBalance() external view returns (uint256)
 event Deposited(address indexed player, uint256 amount)
 event Withdrawn(address indexed player, uint256 amount)
 event PrizePoolFunded(uint256 amount)
+event OwnerWithdrawal(address indexed owner, uint256 amount)
 ```
 
 ---
@@ -412,7 +427,7 @@ This will output your contract address. Save it!
 Edit `scripts/fund-mainnet.js` with your contract address and desired amount:
 
 ```javascript
-const CONTRACT_ADDRESS = "0x37E170C1853999bcDb71B2633C406c8b8Bb23334";
+const CONTRACT_ADDRESS = "0x153C0cb779Cf4955329989d23304736A9889eD0d";
 const FUND_AMOUNT = "10"; // Amount in CELO
 ```
 
@@ -425,6 +440,43 @@ npx hardhat run scripts/fund-mainnet.js --network celo
 5. **Update client configuration**
 
 Update `client/src/lib/contract.ts` with your new contract address.
+
+### Withdraw Funds as Contract Owner
+
+You can withdraw accumulated funds from the contract at any time:
+
+**Withdraw all funds:**
+
+```bash
+cd contract
+npx hardhat run scripts/owner-withdraw.js --network celo
+```
+
+**Withdraw partial amount:**
+
+Edit `scripts/owner-withdraw.js`:
+
+```javascript
+const WITHDRAW_TYPE = "partial";
+const PARTIAL_AMOUNT = "10"; // Amount in CELO
+```
+
+Then run the script.
+
+**Check contract balance:**
+
+```bash
+npx hardhat console --network celo
+```
+
+```javascript
+const contract = await ethers.getContractAt(
+  "MemoryGame",
+  "0x153C0cb779Cf4955329989d23304736A9889eD0d"
+);
+const balance = await contract.getContractBalance();
+console.log("Balance:", ethers.formatEther(balance), "CELO");
+```
 
 ### Deploy to Testnet (for testing)
 
@@ -490,11 +542,12 @@ Contributions are welcome! Please follow these steps:
 
 ### Current Deployment: Celo Mainnet
 
-**Mainnet Contract**: `0x37E170C1853999bcDb71B2633C406c8b8Bb23334`
+**Mainnet Contract**: `0x153C0cb779Cf4955329989d23304736A9889eD0d`
 
 - ✅ Real CELO tokens
 - ✅ Real rewards and prizes
 - ✅ Production-ready
+- ✅ Owner withdrawal enabled
 - ⚠️ Requires real funds
 
 ### Testnet (for Development)
@@ -549,7 +602,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🔗 Links
 
 - **Live Demo**: [Earno on Vercel](https://earno-celo.vercel.app)
-- **Mainnet Contract**: [View on CeloScan](https://celoscan.io/address/0x37E170C1853999bcDb71B2633C406c8b8Bb23334)
+- **Mainnet Contract**: [View on CeloScan](https://celoscan.io/address/0x153C0cb779Cf4955329989d23304736A9889eD0d)
 - **Testnet Contract**: [View on BlockScout](https://celo-alfajores.blockscout.com/address/0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f)
 - **Celo Faucet** (testnet): [https://faucet.celo.org/alfajores](https://faucet.celo.org/alfajores)
 - **Celo Documentation**: [https://docs.celo.org](https://docs.celo.org)

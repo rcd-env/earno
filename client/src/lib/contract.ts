@@ -1,6 +1,6 @@
-// Contract Address - Deployed to Celo Mainnet
+// Contract Address - Deployed to Celo Mainnet (with owner withdrawal)
 export const MEMORY_GAME_ADDRESS =
-  "0x37E170C1853999bcDb71B2633C406c8b8Bb23334" as `0x${string}`;
+  "0x153C0cb779Cf4955329989d23304736A9889eD0d" as `0x${string}`;
 
 // Contract ABI
 export const MEMORY_GAME_ABI = [
@@ -61,6 +61,25 @@ export const MEMORY_GAME_ABI = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "OwnerWithdrawal",
+    type: "event",
+  },
+  {
     inputs: [],
     name: "deposit",
     outputs: [],
@@ -100,6 +119,20 @@ export const MEMORY_GAME_ABI = [
     name: "owner",
     outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
+    name: "ownerWithdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ownerWithdrawAll",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {

@@ -8,6 +8,12 @@ contract MemoryGame {
     event Deposited(address indexed player, uint256 amount);
     event Withdrawn(address indexed player, uint256 amount);
     event PrizePoolFunded(uint256 amount);
+    event OwnerWithdrawal(address indexed owner, uint256 amount);
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can call this function");
+        _;
+    }
     
     constructor() {
         owner = msg.sender;
@@ -39,6 +45,28 @@ contract MemoryGame {
     function fundPrizePool() external payable {
         require(msg.value > 0, "Fund amount must be greater than 0");
         emit PrizePoolFunded(msg.value);
+    }
+    
+    // Owner can withdraw funds from the contract
+    function ownerWithdraw(uint256 amount) external onlyOwner {
+        require(amount > 0, "Withdrawal amount must be greater than 0");
+        require(address(this).balance >= amount, "Insufficient contract balance");
+        
+        (bool success, ) = payable(owner).call{value: amount}("");
+        require(success, "Transfer failed");
+        
+        emit OwnerWithdrawal(owner, amount);
+    }
+    
+    // Owner can withdraw all funds from the contract
+    function ownerWithdrawAll() external onlyOwner {
+        uint256 balance = address(this).balance;
+        require(balance > 0, "No funds to withdraw");
+        
+        (bool success, ) = payable(owner).call{value: balance}("");
+        require(success, "Transfer failed");
+        
+        emit OwnerWithdrawal(owner, balance);
     }
     
     // Get player balance
