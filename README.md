@@ -395,6 +395,7 @@ echo "PRIVATE_KEY=your_private_key_here" > .env
 2. **Ensure you have CELO for gas**
 
 You need at least 1-2 CELO in your wallet:
+
 - For deployment gas fees (~0.5 CELO)
 - For funding the prize pool (optional, recommended 10-100 CELO)
 
@@ -490,6 +491,7 @@ Contributions are welcome! Please follow these steps:
 ### Current Deployment: Celo Mainnet
 
 **Mainnet Contract**: `0x37E170C1853999bcDb71B2633C406c8b8Bb23334`
+
 - ✅ Real CELO tokens
 - ✅ Real rewards and prizes
 - ✅ Production-ready
@@ -498,6 +500,7 @@ Contributions are welcome! Please follow these steps:
 ### Testnet (for Development)
 
 **Testnet Contract**: `0x8E22e7b63FBF78a9d5CA69262Fb0E53e2FD5Dc8f` (Alfajores)
+
 - ✅ Free test tokens
 - ✅ Safe for testing
 - ✅ No real money risk
@@ -508,11 +511,13 @@ Contributions are welcome! Please follow these steps:
 To switch between mainnet and testnet, update the `VITE_USE_MAINNET` environment variable:
 
 **For Mainnet** (default):
+
 ```env
 VITE_USE_MAINNET=true
 ```
 
 **For Testnet**:
+
 ```env
 VITE_USE_MAINNET=false
 ```
